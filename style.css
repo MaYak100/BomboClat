@@ -1,0 +1,449 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Dark theme (отгадывание) - приглушенные тона */
+    --bg-primary: #1a1d23;
+    --bg-secondary: #242830;
+    --bg-card: #2f3541;
+    --card-front: #363d4a;
+    --card-bomb: #5c3a3f;
+    --card-safe: #3a5c45;
+    --accent: #e85d75;
+    --accent-hover: #d14862;
+    --text-primary: #e8eaed;
+    --text-secondary: #9aa0a6;
+    --success: #5fb878;
+    --border-radius: 12px;
+}
+
+/* Light theme (загадывание) - мягкие пастельные тона */
+body.light-theme {
+    --bg-primary: #f0f2f5;
+    --bg-secondary: #fafbfc;
+    --bg-card: #e4e7eb;
+    --card-front: #d8dde4;
+    --card-bomb: #f5c2c9;
+    --card-safe: #c2f5d4;
+    --accent: #6b7fd7;
+    --accent-hover: #5a6fc5;
+    --text-primary: #2c3339;
+    --text-secondary: #65707b;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 1.2s ease, color 1.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Волновой эффект при смене темы */
+.theme-wave {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: -1;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-wave.light {
+    background: #f0f2f5;
+}
+
+.theme-wave.dark {
+    background: #1a1d23;
+}
+
+.theme-wave.expanding {
+    width: 200vmax;
+    height: 200vmax;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Экраны */
+.screen {
+    display: none;
+    opacity: 0;
+}
+
+.screen.active {
+    display: block;
+    animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.screen.exiting {
+    animation: slideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+}
+
+/* Лобби */
+.logo {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+
+.lobby-content {
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    transition: background 1.2s ease;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg-card);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s, background 1.2s ease, color 1.2s ease;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* Выбор режима */
+.mode-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.btn-mode {
+    width: 100%;
+}
+
+/* Онлайн опции */
+.online-options {
+    display: none;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.online-options.expanded {
+    display: block;
+    opacity: 1;
+    max-height: 500px;
+    animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.online-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.join-room {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.join-room input {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.btn-text {
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 8px;
+    margin-top: 1rem;
+}
+
+.btn-text:hover {
+    color: var(--text-primary);
+    background: transparent;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, background 1.2s ease, color 1.2s ease;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    transition: background 0.2s, color 1.2s ease, transform 0.2s;
+}
+
+.btn-secondary:hover {
+    filter: brightness(0.92);
+    transform: translateY(-2px);
+}
+
+/* Экран ожидания */
+#waiting-screen {
+    text-align: center;
+}
+
+#waiting-screen h2 {
+    margin-bottom: 2rem;
+    color: var(--text-secondary);
+}
+
+.room-info {
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+    transition: background 1.2s ease;
+}
+
+.room-code {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--accent);
+    letter-spacing: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+/* Игровой экран */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-secondary);
+    padding: 1rem 1.5rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+    transition: background 1.2s ease;
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.player-info.active {
+    background: var(--bg-card);
+    transform: scale(1.05);
+}
+
+.score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent);
+    transition: color 1.2s ease, transform 0.3s ease;
+}
+
+.game-status {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    transition: color 1.2s ease;
+    text-align: center;
+}
+
+/* Игровое поле */
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 2rem;
+}
+
+.card {
+    aspect-ratio: 1;
+    position: relative;
+    cursor: pointer;
+    perspective: 1000px;
+    transition: transform 0.2s ease;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+}
+
+.card-front {
+    background: var(--card-front);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: background 1.2s ease, box-shadow 0.2s ease;
+}
+
+.card-back.bomb {
+    background: var(--card-bomb);
+    transform: rotateY(180deg);
+}
+
+.card-back.safe {
+    background: var(--card-safe);
+    transform: rotateY(180deg);
+}
+
+.card-back {
+    transform: rotateY(180deg);
+}
+
+/* Hover эффект для активных карточек */
+.card.hoverable:not(.flipped):not(.animating):hover {
+    transform: translateY(-6px);
+}
+
+.card.hoverable:not(.flipped):not(.animating):hover .card-front {
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+body.light-theme .card.hoverable:not(.flipped):not(.animating):hover .card-front {
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    filter: brightness(1.02);
+}
+
+body:not(.light-theme) .card.hoverable:not(.flipped):not(.animating):hover .card-front {
+    filter: brightness(1.08);
+}
+
+/* Напряжение при долгом наведении - начинается слабо через 3 сек */
+.card.hoverable:not(.flipped):not(.animating):hover {
+    animation: nervousShakeWeak 0.25s ease-in-out 3s infinite,
+               nervousShakeStrong 0.25s ease-in-out 6s infinite;
+}
+
+@keyframes nervousShakeWeak {
+    0%, 100% {
+        transform: translateY(-6px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-6px) rotate(0.3deg);
+    }
+}
+
+@keyframes nervousShakeStrong {
+    0%, 100% {
+        transform: translateY(-6px) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-6px) rotate(-0.6deg);
+    }
+    75% {
+        transform: translateY(-6px) rotate(0.6deg);
+    }
+}
+
+/* Заблокированные карточки (только подъем, без покачивания) */
+.card.locked:not(.flipped):not(.animating):hover {
+    transform: translateY(-3px);
+}
+
+.card.locked {
+    cursor: not-allowed;
+}
+
+.game-footer {
+    text-align: center;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .logo {
+        font-size: 2rem;
+    }
+
+    .game-board {
+        gap: 8px;
+    }
+
+    .card-face {
+        font-size: 2rem;
+    }
+}

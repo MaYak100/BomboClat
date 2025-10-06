@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💣 BomboClat</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <div class="theme-wave" id="theme-wave"></div>
+    <div class="container">
+        <!-- Экран входа -->
+        <div id="lobby-screen" class="screen active">
+            <h1 class="logo">💣 BomboClat</h1>
+            <div class="lobby-content">
+                <!-- Выбор режима -->
+                <div id="mode-selection" class="mode-selection">
+                    <button id="offline-btn" class="btn btn-primary btn-mode">Играть оффлайн</button>
+                    <button id="online-btn" class="btn btn-secondary btn-mode">Играть онлайн</button>
+                </div>
+
+                <!-- Онлайн опции (скрыты по умолчанию) -->
+                <div id="online-options" class="online-options">
+                    <input type="text" id="nickname-input" placeholder="Ваш ник" maxlength="15" value="Гость">
+                    <div class="online-buttons">
+                        <button id="create-room-btn" class="btn btn-primary">Создать комнату</button>
+                        <div class="join-room">
+                            <input type="text" id="room-code-input" placeholder="Код комнаты" maxlength="4" pattern="\d{4}">
+                            <button id="join-room-btn" class="btn btn-secondary">Присоединиться</button>
+                        </div>
+                    </div>
+                    <button id="back-to-mode-btn" class="btn btn-text">← Назад</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Экран ожидания -->
+        <div id="waiting-screen" class="screen">
+            <h2>Ожидание игрока...</h2>
+            <div class="room-info">
+                <p>Код комнаты:</p>
+                <div class="room-code" id="display-room-code">----</div>
+            </div>
+            <button id="leave-room-btn" class="btn btn-secondary">Выйти</button>
+        </div>
+
+        <!-- Игровой экран -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="player-info" id="left-player">
+                    <span id="left-player-name">Игрок 1</span>
+                    <span class="score" id="left-player-score">0</span>
+                </div>
+                <div class="game-status" id="game-status">Ожидание...</div>
+                <div class="player-info" id="right-player">
+                    <span class="score" id="right-player-score">0</span>
+                    <span id="right-player-name">Игрок 2</span>
+                </div>
+            </div>
+
+            <div id="game-board" class="game-board">
+                <!-- 9 карточек генерируются через JS -->
+            </div>
+
+            <div class="game-footer">
+                <button id="leave-game-btn" class="btn btn-secondary">Выйти из игры</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
